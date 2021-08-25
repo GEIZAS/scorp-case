@@ -1,73 +1,44 @@
 <template>
-	<v-card>
-		<v-app-bar app color="primary">
-			<v-app-bar-nav-icon>
-				<slot name="icon"></slot>
-			</v-app-bar-nav-icon>
+	<div>
+		<v-app-bar color="primary">
+			<slot name="icon"></slot>
+
+			<v-divider vertical />
 
 			<v-toolbar-title>
 				<slot name="title"></slot>
 			</v-toolbar-title>
 
 			<v-spacer />
-			<v-btn icon @click="goToContactUs()">
-				<v-icon>mdi-email-outline</v-icon>
-			</v-btn>
 
-			<v-menu
-				:close-on-content-click="false"
-				transition="slide-y-transition"
-				offset-y
-			>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn icon v-bind="attrs" v-on="on">
-						<v-icon>mdi-earth</v-icon>
-					</v-btn>
-				</template>
-				<v-card>
-					<v-list>
-						<v-list-item v-for="(item, index) in languages" :key="index">
-							<v-btn text @click="changeLanguage(item.value)">
-								{{ item.title }}
-							</v-btn>
-						</v-list-item>
-					</v-list>
-				</v-card>
-			</v-menu>
-			<v-btn v-if="!userInfo" icon @click="showLoginDialog()">
-				<v-icon>mdi-login</v-icon>
+			<web-app-bar
+				v-if="!isMobile"
+				@routerAction="routerAction"
+				@changeLanguage="changeLanguage"
+				@showLoginDialog="showLoginDialog"
+				@logoutAction="logoutAction"
+				:userInfo="userInfo"
+				:languages="languages"
+			/>
+			<v-btn v-else icon @click="drawerAction">
+				<v-icon>mdi-menu</v-icon>
 			</v-btn>
-			<v-menu
-				v-else-if="userInfo"
-				v-model="showUserMenu"
-				:close-on-content-click="false"
-				transition="slide-y-transition"
-				offset-y
-			>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn color="primary" dark v-bind="attrs" v-on="on">
-						<v-icon left>mdi-account-outline</v-icon>
-						{{ userInfo.name }}
-					</v-btn>
-				</template>
-				<v-card>
-					<v-list>
-						<v-list-item>
-							{{ userInfo.email }}
-						</v-list-item>
-						<v-list-item>
-							<v-btn text @click="logoutAction(userInfo)">
-								{{ $t("logout") }}
-							</v-btn>
-						</v-list-item>
-					</v-list>
-				</v-card>
-			</v-menu>
 		</v-app-bar>
 
-		<v-container>
+		<v-container style="max-width:1185px;">
 			<slot name="content"> </slot>
 		</v-container>
+
+		<mobile-navigation-drawer
+			v-if="showDrawer"
+			v-model="showDrawer"
+			@routerAction="routerAction"
+			@changeLanguage="changeLanguage"
+			@showLoginDialog="showLoginDialog"
+			@logoutAction="logoutAction"
+			:userInfo="userInfo"
+			:languages="languages"
+		/>
 
 		<v-footer dark padless>
 			<v-card flat tile class="indigo lighten-1 white--text text-center">
@@ -106,28 +77,42 @@
 			v-if="loginDialog.visibility"
 			v-model="loginDialog.visibility"
 		/>
-	</v-card>
+	</div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import LoginDialog from "../partial/dialog/LoginDialog.vue";
+import LoginDialog from "../partial/dialog/LoginDialog";
+import WebAppBar from "../partial/webAppBar";
+import MobileNavigationDrawer from "../partial/mobileNavigationDrawer";
 
 export default {
 	components: {
 		LoginDialog,
+		WebAppBar,
+		MobileNavigationDrawer,
 	},
 	data() {
 		return {
-			showUserMenu: false,
+			showWebAppBar: true,
+			showDrawer: false,
+
 			loginDialog: {
 				visibility: false,
 				show: () => (this.loginDialog.visibility = true),
 				hide: () => (this.loginDialog.visibility = false),
 			},
 			languages: [
-				{ title: this.$t("$language.tr"), value: "tr" },
-				{ title: this.$t("$language.en"), value: "en" },
+				{
+					title: this.$t("$language.tr"),
+					value: "tr",
+					icon: "mdi-alpha-t-circle-outline",
+				},
+				{
+					title: this.$t("$language.en"),
+					value: "en",
+					icon: "mdi-alpha-e-circle-outline",
+				},
 			],
 			socialMedia: [
 				{
@@ -149,13 +134,21 @@ export default {
 			],
 		};
 	},
+	watch: {
+		isMobile() {
+			this.showDrawer = false;
+		},
+	},
 	computed: {
 		...mapGetters(["userInfo"]),
+		isMobile() {
+			return this.$vuetify.breakpoint.xsOnly;
+		},
 	},
 	methods: {
 		...mapActions(["setLanguage", "logoutUser", "showSnackbar"]),
-		goToContactUs() {
-			this.$router.push("contact-us");
+		routerAction(pageRoute) {
+			this.$router.push(pageRoute);
 		},
 		showLoginDialog() {
 			this.loginDialog.show();
@@ -180,9 +173,9 @@ export default {
 				},
 			});
 		},
-	},
-	created() {
-		//
+		drawerAction() {
+			this.showDrawer = !this.showDrawer;
+		},
 	},
 };
 </script>

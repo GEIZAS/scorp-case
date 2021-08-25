@@ -1,25 +1,25 @@
 <template>
 	<page-template>
 		<template slot="icon">
-			<v-btn icon @click="goToHome()">
-				<v-icon>
-					mdi-home-outline
-				</v-icon>
-			</v-btn>
+			<v-icon class="mr-4">
+				mdi-home
+			</v-icon>
 		</template>
 
 		<template slot="title">
-			{{ $t("homePage") }}
+			<v-card-title>
+				{{ $t("homePage") }}
+			</v-card-title>
 		</template>
 
 		<template slot="buttons"></template>
 
 		<template slot="content">
-			<v-card>
-				<v-card-title>
+			<v-card class="mt-16 mb-16">
+				<v-card-title class="px-8 pt-8">
 					{{ $t("$dummyText.homePage.title") }}
 				</v-card-title>
-				<v-card-text>
+				<v-card-text class="pa-8">
 					{{ $t("$dummyText.homePage.body") }}
 				</v-card-text>
 			</v-card>
@@ -33,11 +33,6 @@ import PageTemplate from "@/components/templates/PageTemplate";
 export default {
 	components: {
 		PageTemplate,
-	},
-	methods: {
-		goToHome() {
-			this.$router.push("/");
-		},
 	},
 };
 </script>

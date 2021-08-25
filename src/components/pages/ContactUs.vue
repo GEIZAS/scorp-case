@@ -1,15 +1,15 @@
 <template>
 	<page-template>
 		<template slot="icon">
-			<v-btn icon @click="goToHome()">
-				<v-icon>
-					mdi-home-outline
-				</v-icon>
-			</v-btn>
+			<v-icon class="mr-4">
+				mdi-email
+			</v-icon>
 		</template>
 
 		<template slot="title">
-			{{ $t("contactUs") }}
+			<v-card-title>
+				{{ $t("contactUs") }}
+			</v-card-title>
 		</template>
 
 		<template slot="buttons"></template>

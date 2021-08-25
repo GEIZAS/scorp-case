@@ -44,9 +44,10 @@ const state = {
 };
 
 const getters = {
-	ready(state) {
+	isReady(state) {
+		console.log("READY", state.settings.locale);
 		return Boolean(
-			state.isReady // add flag when need ready control
+			state.settings.locale // add flag when need ready control
 		);
 	},
 	userInfo(state) {
@@ -61,24 +62,19 @@ const mutations = {
 	SET_LANGUAGE(state, language) {
 		state.locale = language;
 	},
+
 	SET_USER_INFO(state, userInfo) {
 		state.userInfo = userInfo;
 	},
 	CLEAR_USER_INFO(state) {
 		state.userInfo = null;
 	},
+
 	SET_PROGRESS_STATE(state, visibility) {
 		state.progressBar.visibility = visibility;
 	},
 	SET_SNACKBAR_STATE(state, visibility) {
 		state.snackbar.visibility = visibility;
-	},
-	SET_ALERT_DIALOG_STATE(state, visibility) {
-		state.alertDialog.visibility = visibility;
-		if (!visibility) {
-			state.progressBar.visibility = false;
-			state.progressBar.animating = true;
-		}
 	},
 	SET_CONFIRM_DIALOG_STATE(state, visibility) {
 		state.confirmDialog.visibility = visibility;
@@ -89,23 +85,25 @@ const actions = {
 	setLanguage({ commit }, language) {
 		commit("SET_LANGUAGE", language);
 		setSetting(Setting.locale, language);
-		location.reload(); // TODO: without reload apply language change
+		location.reload(); // TODO: without reload apply language change action
 	},
+
 	loginUser({ commit }, userInfo) {
 		console.log("userInfo :>> ", userInfo);
 		commit("SET_USER_INFO", userInfo);
 		setSetting(Setting.userName, userInfo.name);
 		setSetting(Setting.userEmail, userInfo.email);
 		setSetting(Setting.userPassword, userInfo.password);
-		location.reload(); // TODO: without reload apply language change
+		location.reload();
 	},
 	logoutUser({ commit }) {
 		commit("CLEAR_USER_INFO");
 		deleteSetting(Setting.userName);
 		deleteSetting(Setting.userEmail);
 		deleteSetting(Setting.userPassword);
-		location.reload(); // TODO: without reload apply language change
+		location.reload();
 	},
+
 	showProgressBar({ commit }) {
 		state.progressBar.color = "warning";
 		state.progressBar.animating = true;
@@ -123,14 +121,6 @@ const actions = {
 	},
 	hideSnackbar({ commit }) {
 		commit("SET_SNACKBAR_STATE", false);
-	},
-	showAlertDialog({ commit }, { title, message }) {
-		state.alertDialog.title = title;
-		state.alertDialog.message = message;
-		commit("SET_ALERT_DIALOG_STATE", true);
-	},
-	hideAlertDialog({ commit }) {
-		commit("SET_ALERT_DIALOG_STATE", false);
 	},
 	showConfirmDialog(
 		{ commit },

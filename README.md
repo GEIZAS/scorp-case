@@ -1,5 +1,7 @@
 # scorp-case
 
+# I guess only it's just missing the "apply language switch operation without page refresh" step. According to my research the language change is not applied without restarting Vue Instance. But after the delivery of this project, I plan to continue my research and learn.
+
 ## Project setup
 
 ```
@@ -16,12 +18,6 @@ npm run serve
 
 ```
 npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
 ```
 
 ### Customize configuration

@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
-		<router-view />
-		<v-container v-if="!ready" fill-height align-center justify-center>
+		<router-view v-if="isReady" />
+		<v-container v-if="!isReady" fill-height align-center justify-center>
 			<v-progress-circular
 				:size="100"
 				:width="7"
@@ -16,11 +16,6 @@
 			:color="$store.state.progressBar.color"
 			absolute
 			top
-		/>
-		<alert-dialog
-			v-model="$store.state.alertDialog.visibility"
-			:title="$store.state.alertDialog.title"
-			:content="$store.state.alertDialog.message"
 		/>
 		<confirm-dialog
 			v-model="$store.state.confirmDialog.visibility"
@@ -46,25 +41,19 @@
 
 <script>
 import { mapGetters } from "vuex";
-import AlertDialog from "@/components/partial/dialog/AlertDialog";
 import ConfirmDialog from "@/components/partial/dialog/ConfirmDialog";
 
 export default {
 	components: {
-		AlertDialog,
 		ConfirmDialog,
 	},
 	computed: {
-		...mapGetters(["ready"]),
+		...mapGetters(["isReady"]),
 	},
 	data() {
 		return {
 			//
 		};
-	},
-
-	created() {
-		console.log("CREATED");
 	},
 };
 </script>

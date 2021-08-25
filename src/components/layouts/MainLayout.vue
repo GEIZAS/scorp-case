@@ -7,14 +7,5 @@
 </template>
 
 <script>
-export default {
-	data() {
-		return {
-			logoUrl: "../../assets/logo.png",
-		};
-	},
-	methods: {
-		//
-	},
-};
+//
 </script>
