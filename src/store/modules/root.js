@@ -1,5 +1,7 @@
 import Vue from "vue";
 import { Setting, setSetting, getSetting, deleteSetting } from "../../data/ls";
+import i18n from "../../plugins/i18n";
+import vuetify from "@/plugins/vuetify";
 
 const state = {
 	isReady: true,
@@ -84,8 +86,10 @@ const mutations = {
 const actions = {
 	setLanguage({ commit }, language) {
 		commit("SET_LANGUAGE", language);
+		i18n.locale = language;
+		document.getElementsByTagName("html")[0].setAttribute("lang", language);
+		vuetify.framework.lang.current = language;
 		setSetting(Setting.locale, language);
-		location.reload(); // TODO: without reload apply language change action
 	},
 
 	loginUser({ commit }, userInfo) {

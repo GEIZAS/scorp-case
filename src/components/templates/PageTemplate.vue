@@ -21,7 +21,7 @@
 				:languages="languages"
 			/>
 			<v-btn v-else icon @click="drawerAction">
-				<v-icon>mdi-menu</v-icon>
+				<v-icon>{{ menuIcon }}</v-icon>
 			</v-btn>
 		</v-app-bar>
 
@@ -143,6 +143,9 @@ export default {
 		...mapGetters(["userInfo"]),
 		isMobile() {
 			return this.$vuetify.breakpoint.xsOnly;
+		},
+		menuIcon() {
+			return this.showDrawer ? "mdi-menu-open" : "mdi-menu";
 		},
 	},
 	methods: {

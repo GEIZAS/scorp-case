@@ -36,6 +36,8 @@
 							v-model="currentItem.phone"
 							:label="$t('phoneNumber')"
 							:rules="rules.phone"
+							type="number"
+							counter="10"
 						/>
 						<v-autocomplete
 							v-model="currentItem.country"
@@ -55,7 +57,7 @@
 				<v-card-actions>
 					<v-spacer />
 					<v-btn text @click="sendAction(currentItem)" color="primary" outlined>
-						{{ this.$t("login") }}
+						{{ this.$t("send") }}
 					</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -121,7 +123,7 @@ export default {
 							return this.$t("$validation.required", {
 								item: this.$t("phoneNumber"),
 							});
-						else if (isNaN(v))
+						else if (isNaN(v) || v.length !== 10)
 							return this.$t("$validation.invalid", {
 								item: this.$t("phoneNumber"),
 							});

@@ -116,6 +116,7 @@ export default {
 	ok: "OK",
 	password: "Password",
 	phoneNumber: "Phone Number",
+	send: "Send",
 	theme: "Theme",
 	userLogin: "User Login",
 	yes: "Yes",
